@@ -1,6 +1,6 @@
 {
-  "name": "vscode-css-languageservice",
-  "version": "6.2.4",
+  "name": "reactive-liquid-css-languageservice",
+  "version": "0.0.9",
   "description": "Language service for CSS, LESS and SCSS",
   "main": "./lib/umd/cssLanguageService.js",
   "typings": "./lib/umd/cssLanguageService",

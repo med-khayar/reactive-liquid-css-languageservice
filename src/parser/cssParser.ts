@@ -40,6 +40,7 @@ export class Parser {
 	}
 
 	public peekKeyword(text: string): boolean {
+		//console.log("PK",TokenType.AtKeyword === this.token.type && text.length === this.token.text.length && text === this.token.text.toLowerCase(),this.token.type,this.token.text)
 		return TokenType.AtKeyword === this.token.type && text.length === this.token.text.length && text === this.token.text.toLowerCase();
 	}
 
@@ -289,7 +290,7 @@ export class Parser {
 			}
 
 			if (!inRecovery) {
-				if (this.peek(TokenType.AtKeyword)) {
+				if (this.peek(TokenType.AtKeyword)) {	
 					this.markError(node, ParseError.UnknownAtRule);
 				} else {
 					this.markError(node, ParseError.RuleOrSelectorExpected);
@@ -475,9 +476,11 @@ export class Parser {
 		if (this.prevToken) {
 			node.colonPosition = this.prevToken.offset;
 		}
-
-		if (!node.setValue(this._parseExpr())) {
-			return this.finish(node, ParseError.PropertyValueExpected);
+		
+		if(!this.acceptKeyword('@__')){
+			if (!node.setValue(this._parseExpr())) {
+				return this.finish(node, ParseError.PropertyValueExpected);
+			}
 		}
 
 		node.addChild(this._parsePrio());
@@ -1241,6 +1244,10 @@ export class Parser {
 	// https://www.w3.org/TR/css-syntax-3/#consume-an-at-rule
 	public _parseUnknownAtRule(): nodes.Node | null {
 		if (!this.peek(TokenType.AtKeyword)) {
+			return null;
+		}
+
+		if(this.acceptKeyword('@__')){
 			return null;
 		}
 
